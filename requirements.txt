@@ -1,0 +1,36 @@
+# Nayhein-V1.2 requirements
+# Install with: pip install -r requirements.txt
+
+# Core PyTorch
+torch>=2.4.0
+
+# HuggingFace ecosystem
+transformers>=4.46.0
+tokenizers>=0.20.0
+datasets>=3.0.0
+accelerate>=1.0.0
+huggingface_hub>=0.26.0
+safetensors>=0.4.0
+
+# Training
+peft>=0.13.0
+trl>=0.12.0
+bitsandbytes>=0.44.0
+
+# Attention
+flash-attn>=2.6.3; sys_platform != "win32"
+
+# Monitoring
+wandb>=0.18.0
+
+# Vision
+pillow>=10.0.0
+torchvision>=0.19.0
+
+# Constrained decoding (optional)
+outlines>=0.1.0
+
+# Utilities
+pyyaml>=6.0
+numpy>=1.26.0
+tqdm>=4.66.0

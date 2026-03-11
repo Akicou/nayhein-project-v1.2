@@ -1,0 +1,14 @@
+# configs/dpo_5b.yaml
+# Stage 4: DPO alignment for 5B Instruct
+
+beta: 0.1
+learning_rate: 5.0e-7
+epochs: 1
+batch_size_per_device: 2
+gradient_accumulation_steps: 16
+sequence_length: 4096
+loss_type: dpo
+reference_model: frozen_sft_checkpoint
+
+wandb_project: "nayhein-v1.2"
+log_every_n_steps: 10

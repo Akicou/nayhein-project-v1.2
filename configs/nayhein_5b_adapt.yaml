@@ -1,0 +1,47 @@
+# configs/nayhein_5b_adapt.yaml
+# Stage 2: 5B continued pretraining (after expansion from 50M)
+# Reduced LR for weight adaptation. 20B tokens total.
+
+model_size: 5B
+precision: bfloat16
+
+sequence_length: 4096
+packing: true
+
+batch_size_per_device: 4
+gradient_accumulation_steps: 8        # global batch ≈ 128 seqs ≈ 500k tokens/step
+learning_rate: 5.0e-5
+lr_schedule: cosine_with_warmup
+warmup_steps: 500
+weight_decay: 0.1
+beta1: 0.9
+beta2: 0.95
+epsilon: 1.0e-8
+max_grad_norm: 1.0
+total_tokens: 20_000_000_000           # 20B tokens for adaptation
+
+# Higher FineWeb-Edu weight for adaptation
+fineweb_edu_weight: 0.70
+wikipedia_weight: 0.10
+starcoder_weight: 0.10
+proof_pile_weight: 0.10
+
+loss_ar_weight: 1.0
+loss_mtp_weight: 0.3
+loss_diffusion_weight: 0.5
+diffusion_training_probability: 0.3   # lower diffusion ratio during adaptation
+
+# Vision encoder frozen during 5B adaptation
+vision_encoder_frozen: true
+
+fsdp_sharding_strategy: FULL_SHARD
+fsdp_cpu_offload: false
+fsdp_mixed_precision: bfloat16
+fsdp_activation_checkpointing: true
+compile: true
+flash_attention: true
+
+log_every_n_steps: 10
+eval_every_n_steps: 5000
+save_every_n_steps: 10000
+wandb_project: "nayhein-v1.2"
