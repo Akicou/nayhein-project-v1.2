@@ -34,7 +34,7 @@ fsdp_cpu_offload: false
 fsdp_mixed_precision: bfloat16
 fsdp_activation_checkpointing: true
 compile: true                          # torch.compile(model, mode="reduce-overhead")
-flash_attention: true
+# Attention backend: PyTorch SDPA (no flash-attn required)
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 log_every_n_steps: 10

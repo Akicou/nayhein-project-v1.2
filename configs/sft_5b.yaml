@@ -17,7 +17,6 @@ vision_encoder_frozen: false           # unfreeze vision for SFT
 
 fsdp_sharding_strategy: FULL_SHARD
 fsdp_mixed_precision: bfloat16
-flash_attention: true
 
 # QLoRA enabled for 5B to fit on 4×80GB
 qlora_enabled: true

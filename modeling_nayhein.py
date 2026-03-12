@@ -23,18 +23,9 @@ from configuration_nayhein import NayheinConfig
 
 logger = logging.get_logger(__name__)
 
-# ── Flash Attention optional import ───────────────────────────────────────────
-try:
-    from flash_attn import flash_attn_func, flash_attn_varlen_func
-    from flash_attn.bert_padding import index_first_axis, pad_input, unpad_input
-
-    FLASH_ATTN_AVAILABLE = True
-except ImportError:
-    FLASH_ATTN_AVAILABLE = False
-    logger.warning_once(
-        "flash_attn not found; falling back to PyTorch SDPA. "
-        "Install flash-attn for significantly faster training."
-    )
+# Attention backend: PyTorch SDPA (torch.nn.functional.scaled_dot_product_attention).
+# No flash-attn dependency required. SDPA automatically selects the most efficient
+# kernel available on the current hardware (FlashAttention-2, memory-efficient, or math).
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -281,33 +272,20 @@ class NayheinAttention(nn.Module):
         k_expanded = self._expand_kv(k)
         v_expanded = self._expand_kv(v)
 
-        # Attention computation
-        if FLASH_ATTN_AVAILABLE and hidden_states.is_cuda:
-            # Flash Attention 2 — expects (B, S, H, D) layout
-            q_fa = q.transpose(1, 2)
-            k_fa = k_expanded.transpose(1, 2)
-            v_fa = v_expanded.transpose(1, 2)
-            attn_out = flash_attn_func(
-                q_fa,
-                k_fa,
-                v_fa,
-                dropout_p=self.attention_dropout if self.training else 0.0,
-                causal=True,
-            )  # (B, S, H, D)
-            attn_out = attn_out.reshape(B, S, self.hidden_size)
-        else:
-            # PyTorch SDPA fallback
-            scale = 1.0 / math.sqrt(self.head_dim)
-            attn_out = F.scaled_dot_product_attention(
-                q,
-                k_expanded,
-                v_expanded,
-                attn_mask=attention_mask,
-                dropout_p=self.attention_dropout if self.training else 0.0,
-                is_causal=(attention_mask is None),
-                scale=scale,
-            )  # (B, H, S, D)
-            attn_out = attn_out.transpose(1, 2).reshape(B, S, self.hidden_size)
+        # Attention computation — PyTorch SDPA (no flash-attn dependency).
+        # torch.backends.cuda.enable_flash_sdp / enable_mem_efficient_sdp can be
+        # set at the call site to tune the kernel choice on CUDA hardware.
+        scale = 1.0 / math.sqrt(self.head_dim)
+        attn_out = F.scaled_dot_product_attention(
+            q,
+            k_expanded,
+            v_expanded,
+            attn_mask=attention_mask,
+            dropout_p=self.attention_dropout if self.training else 0.0,
+            is_causal=(attention_mask is None),
+            scale=scale,
+        )  # (B, H, S, D)
+        attn_out = attn_out.transpose(1, 2).reshape(B, S, self.hidden_size)
 
         return self.o_proj(attn_out), present
 

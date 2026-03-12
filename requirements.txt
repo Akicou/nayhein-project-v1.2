@@ -17,9 +17,6 @@ peft>=0.13.0
 trl>=0.12.0
 bitsandbytes>=0.44.0
 
-# Attention
-flash-attn>=2.6.3; sys_platform != "win32"
-
 # Monitoring
 wandb>=0.18.0
 

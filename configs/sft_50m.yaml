@@ -18,7 +18,6 @@ vision_encoder_frozen: false           # unfreeze vision for SFT
 fsdp_sharding_strategy: FULL_SHARD
 fsdp_mixed_precision: bfloat16
 fsdp_activation_checkpointing: true
-flash_attention: true
 
 # QLoRA disabled for 50M (full fine-tuning)
 qlora_enabled: false
