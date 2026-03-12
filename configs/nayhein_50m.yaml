@@ -33,7 +33,7 @@ fsdp_sharding_strategy: FULL_SHARD
 fsdp_cpu_offload: false
 fsdp_mixed_precision: bfloat16
 fsdp_activation_checkpointing: true
-compile: true                          # torch.compile(model, mode="reduce-overhead")
+compile: false                         # torch.compile disabled due to Triton resource limits
 # Attention backend: PyTorch SDPA (no flash-attn required)
 
 # ── Logging ───────────────────────────────────────────────────────────────────
