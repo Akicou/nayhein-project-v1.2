@@ -54,7 +54,7 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
         "fineweb-edu": 0.65 * sample_gb * 1e9,
         "wikipedia": 0.15 * sample_gb * 1e9,
         "github-top-code": 0.10 * sample_gb * 1e9,
-        "proof-pile-2": 0.10 * sample_gb * 1e9,
+        "openwebmath": 0.10 * sample_gb * 1e9,
     }
 
     # ── FineWeb-Edu ───────────────────────────────────────────────────────────
@@ -111,12 +111,12 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
     except Exception as e:
         logger.warning(f"GitHub Top Code error: {e}")
 
-    # ── Proof-Pile-2 ──────────────────────────────────────────────────────────
-    logger.info("Streaming Proof-Pile-2...")
+    # ── OpenWebMath ────────────────────────────────────────────────────────────
+    logger.info("Streaming OpenWebMath...")
     bytes_seen = 0
-    target = bytes_per_source["proof-pile-2"]
+    target = bytes_per_source["openwebmath"]
     try:
-        ds = load_dataset("EleutherAI/proof-pile-2", split="train", streaming=True)
+        ds = load_dataset("Skylion007/openwebmath", split="train", streaming=True)
         for ex in ds:
             text = ex.get("text", "")
             if text:
@@ -125,7 +125,7 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
                 if bytes_seen >= target:
                     break
     except Exception as e:
-        logger.warning(f"Proof-Pile-2 error: {e}")
+        logger.warning(f"OpenWebMath error: {e}")
 
 
 def train_tokenizer(output_dir: str, sample_gb: float = SAMPLE_GB_DEFAULT):

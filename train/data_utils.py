@@ -33,8 +33,8 @@ PRETRAIN_DATASETS = {
         "weight": 0.10,
         "streaming": True,
     },
-    "proof-pile-2": {
-        "path": "EleutherAI/proof-pile-2",
+    "openwebmath": {
+        "path": "Skylion007/openwebmath",
         "split": "train",
         "text_column": "text",
         "weight": 0.10,
