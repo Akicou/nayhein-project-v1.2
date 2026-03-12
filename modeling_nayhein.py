@@ -276,6 +276,8 @@ class NayheinAttention(nn.Module):
         # torch.backends.cuda.enable_flash_sdp / enable_mem_efficient_sdp can be
         # set at the call site to tune the kernel choice on CUDA hardware.
         scale = 1.0 / math.sqrt(self.head_dim)
+        if attention_mask is not None and attention_mask.dtype != q.dtype:
+            attention_mask = attention_mask.to(q.dtype)
         attn_out = F.scaled_dot_product_attention(
             q,
             k_expanded,
