@@ -24,7 +24,7 @@ total_tokens: 20_000_000_000           # 20B tokens for adaptation
 fineweb_edu_weight: 0.70
 wikipedia_weight: 0.10
 github_top_code_weight: 0.10
-openwebmath_weight: 0.10
+ultradata_math_weight: 0.10
 
 loss_ar_weight: 1.0
 loss_mtp_weight: 0.3

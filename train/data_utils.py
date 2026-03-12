@@ -33,10 +33,10 @@ PRETRAIN_DATASETS = {
         "weight": 0.10,
         "streaming": True,
     },
-    "openwebmath": {
-        "path": "Skylion007/openwebmath",
+    "ultradata-math": {
+        "path": "openbmb/UltraData-Math",
         "split": "train",
-        "text_column": "text",
+        "text_column": "content",
         "weight": 0.10,
         "streaming": True,
     },

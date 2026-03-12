@@ -54,7 +54,7 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
         "fineweb-edu": 0.65 * sample_gb * 1e9,
         "wikipedia": 0.15 * sample_gb * 1e9,
         "github-top-code": 0.10 * sample_gb * 1e9,
-        "openwebmath": 0.10 * sample_gb * 1e9,
+        "ultradata-math": 0.10 * sample_gb * 1e9,
     }
 
     # ── FineWeb-Edu ───────────────────────────────────────────────────────────
@@ -111,21 +111,21 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
     except Exception as e:
         logger.warning(f"GitHub Top Code error: {e}")
 
-    # ── OpenWebMath ────────────────────────────────────────────────────────────
-    logger.info("Streaming OpenWebMath...")
+    # ── UltraData-Math ─────────────────────────────────────────────────────────
+    logger.info("Streaming UltraData-Math...")
     bytes_seen = 0
-    target = bytes_per_source["openwebmath"]
+    target = bytes_per_source["ultradata-math"]
     try:
-        ds = load_dataset("Skylion007/openwebmath", split="train", streaming=True)
+        ds = load_dataset("openbmb/UltraData-Math", split="train", streaming=True)
         for ex in ds:
-            text = ex.get("text", "")
+            text = ex.get("content", "")
             if text:
                 yield text
                 bytes_seen += len(text.encode("utf-8"))
                 if bytes_seen >= target:
                     break
     except Exception as e:
-        logger.warning(f"OpenWebMath error: {e}")
+        logger.warning(f"UltraData-Math error: {e}")
 
 
 def train_tokenizer(output_dir: str, sample_gb: float = SAMPLE_GB_DEFAULT):
