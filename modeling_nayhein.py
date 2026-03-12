@@ -12,7 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
 
-from transformers import PreTrainedModel
+from transformers import PreTrainedModel, GenerationMixin
 from transformers.modeling_outputs import (
     BaseModelOutputWithPast,
     CausalLMOutputWithPast,
@@ -714,7 +714,7 @@ class NayheinModel(PreTrainedModel):
 # ══════════════════════════════════════════════════════════════════════════════
 
 
-class NayheinForCausalLM(PreTrainedModel):
+class NayheinForCausalLM(PreTrainedModel, GenerationMixin):
     """
     Nayhein-V1.2 full model.
 
@@ -729,7 +729,7 @@ class NayheinForCausalLM(PreTrainedModel):
 
     config_class = NayheinConfig
     base_model_prefix = "model"
-    _tied_weights_keys = ["lm_head.weight"]
+    _tied_weights_keys = {"lm_head": "model.embed_tokens"}
 
     def __init__(self, config: NayheinConfig):
         super().__init__(config)
