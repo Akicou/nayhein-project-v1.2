@@ -116,7 +116,12 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
     bytes_seen = 0
     target = bytes_per_source["ultradata-math"]
     try:
-        ds = load_dataset("openbmb/UltraData-Math", split="train", streaming=True)
+        ds = load_dataset(
+            "openbmb/UltraData-Math",
+            "UltraData-Math-L3-Conversation-Synthetic",
+            split="train",
+            streaming=True,
+        )
         for ex in ds:
             text = ex.get("content", "")
             if text:

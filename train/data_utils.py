@@ -35,6 +35,7 @@ PRETRAIN_DATASETS = {
     },
     "ultradata-math": {
         "path": "openbmb/UltraData-Math",
+        "name": "UltraData-Math-L3-Conversation-Synthetic",
         "split": "train",
         "text_column": "content",
         "weight": 0.10,
