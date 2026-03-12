@@ -183,11 +183,11 @@ class NayheinRMSNorm(nn.Module):
         self.variance_epsilon = eps
 
     def forward(self, x: Tensor) -> Tensor:
-        dtype = x.dtype
+        input_dtype = x.dtype
         x = x.to(torch.float32)
         variance = x.pow(2).mean(-1, keepdim=True)
         x = x * torch.rsqrt(variance + self.variance_epsilon)
-        return (self.weight * x).to(dtype)
+        return self.weight * x
 
 
 # ══════════════════════════════════════════════════════════════════════════════
