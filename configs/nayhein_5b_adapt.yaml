@@ -23,7 +23,7 @@ total_tokens: 20_000_000_000           # 20B tokens for adaptation
 # Higher FineWeb-Edu weight for adaptation
 fineweb_edu_weight: 0.70
 wikipedia_weight: 0.10
-starcoder_weight: 0.10
+github_top_code_weight: 0.10
 proof_pile_weight: 0.10
 
 loss_ar_weight: 1.0

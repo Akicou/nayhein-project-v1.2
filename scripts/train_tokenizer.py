@@ -53,7 +53,7 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
     bytes_per_source = {
         "fineweb-edu": 0.65 * sample_gb * 1e9,
         "wikipedia": 0.15 * sample_gb * 1e9,
-        "starcoderdata": 0.10 * sample_gb * 1e9,
+        "github-top-code": 0.10 * sample_gb * 1e9,
         "proof-pile-2": 0.10 * sample_gb * 1e9,
     }
 
@@ -91,29 +91,25 @@ def text_iterator(sample_gb: float) -> Generator[str, None, None]:
     except Exception as e:
         logger.warning(f"Wikipedia error: {e}")
 
-    # ── StarCoder ─────────────────────────────────────────────────────────────
-    logger.info("Streaming StarCoder (Python/JS/Go)...")
+    # ── GitHub Top Code ────────────────────────────────────────────────────────
+    logger.info("Streaming GitHub Top Code...")
     bytes_seen = 0
-    target = bytes_per_source["starcoderdata"]
+    target = bytes_per_source["github-top-code"]
     try:
-        for lang in ["python", "javascript", "go"]:
-            ds = load_dataset(
-                "bigcode/starcoderdata",
-                data_dir=lang,
-                split="train",
-                streaming=True,
-            )
-            for ex in ds:
-                text = ex.get("content", "")
-                if text:
-                    yield text
-                    bytes_seen += len(text.encode("utf-8"))
-                    if bytes_seen >= target:
-                        break
-            if bytes_seen >= target:
-                break
+        ds = load_dataset(
+            "ronantakizawa/github-top-code",
+            split="train",
+            streaming=True,
+        )
+        for ex in ds:
+            text = ex.get("content", "")
+            if text:
+                yield text
+                bytes_seen += len(text.encode("utf-8"))
+                if bytes_seen >= target:
+                    break
     except Exception as e:
-        logger.warning(f"StarCoder error: {e}")
+        logger.warning(f"GitHub Top Code error: {e}")
 
     # ── Proof-Pile-2 ──────────────────────────────────────────────────────────
     logger.info("Streaming Proof-Pile-2...")

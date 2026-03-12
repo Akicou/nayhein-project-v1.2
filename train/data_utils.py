@@ -26,13 +26,12 @@ PRETRAIN_DATASETS = {
         "weight": 0.15,
         "streaming": True,
     },
-    "starcoderdata": {
-        "path": "bigcode/starcoderdata",
+    "github-top-code": {
+        "path": "ronantakizawa/github-top-code",
         "split": "train",
         "text_column": "content",
         "weight": 0.10,
         "streaming": True,
-        "languages": ["python", "javascript", "go"],
     },
     "proof-pile-2": {
         "path": "EleutherAI/proof-pile-2",
